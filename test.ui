@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WeatherApp</class>
+ <widget class="QMainWindow" name="WeatherApp">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>750</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dự báo thời tiết</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* 🌿 Nền màu xanh-xám nhẹ */
+    QWidget {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        background: qlineargradient(x1:0, y1:0, x2:1, y2:1, 
+                    stop:0 #E0EAFC, stop:1 #CFDEF3); /* Gradient xanh-xám nhẹ */
+    }
+
+    QLabel {
+        padding: 4px;
+    }
+
+    /* 🕒 Thời gian &amp; Địa điểm - làm nổi bật hơn */
+    QLabel#label_time, QLabel#label_location {
+        font-size: 22px;
+        font-weight: bold;
+        color: #ffffff;
+        background-color: rgba(0, 0, 0, 0.5); /* Nền trong suốt nhẹ */
+        border-radius: 10px;
+        padding: 12px;
+        text-align: center;
+    }
+
+    /* 🔍 Ô tìm kiếm */
+    QLineEdit#lineEdit_city_search {
+        font-size: 18px;
+        padding: 10px;
+        border: 2px solid #4A90E2;
+        border-radius: 25px;
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #333;
+    }
+
+    /* Căn giữa placeholder */
+    QLineEdit#lineEdit_city_search::placeholder {
+        text-align: center;
+        font-style: italic;
+        color: #666;
+    }
+
+    /* 🎯 Nút tìm kiếm */
+    QPushButton#btn_search {
+        background-color: #4A90E2;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        border-radius: 25px;
+        padding: 8px;
+    }
+
+    QPushButton#btn_search:hover {
+        background-color: #357ABD;
+    }
+
+    /* 🌤 Khung dự báo thời tiết */
+    QFrame#forecast_container {
+        max-width: 920px;
+        min-height: 180px;
+        padding: 5px;
+    }
+
+    QFrame#forecast_container &gt; QFrame {
+        min-width: 130px;
+        max-width: 140px;
+        min-height: 180px;
+        margin: 8px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.95);
+        border: 2px solid #4A90E2;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    QLabel#label_day1, QLabel#label_day2, QLabel#label_day3,
+    QLabel#label_day4, QLabel#label_day5, QLabel#label_day6, QLabel#label_day7 {
+        font-weight: bold;
+        font-size: 16px;
+        text-align: center;
+        color: #4A90E2;
+    }
+
+    QLabel#label_temp1, QLabel#label_temp2, QLabel#label_temp3,
+    QLabel#label_temp4, QLabel#label_temp5, QLabel#label_temp6, QLabel#label_temp7 {
+        font-size: 14px;
+        color: #333;
+    }
+
+    QLabel#label_rain1, QLabel#label_rain2, QLabel#label_rain3,
+    QLabel#label_rain4, QLabel#label_rain5, QLabel#label_rain6, QLabel#label_rain7 {
+        font-size: 14px;
+        font-weight: bold;
+        color: #357ABD;
+    }
+
+    /* ⚠️ Cảnh báo thời tiết */
+    QLabel#label_weather_alert {
+        background-color: rgba(255, 102, 102, 0.9);
+        padding: 12px;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 16px;
+        color: white;
+    }</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label_time">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>180</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>01:21 PM</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_location">
+    <property name="geometry">
+     <rect>
+      <x>749</x>
+      <y>20</y>
+      <width>211</width>
+      <height>60</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Hà Nội, Việt Nam</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_city_search">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>90</y>
+      <width>300</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Nhập tên thành phố...</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_search">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>90</y>
+      <width>60</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>🔍</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame_current_weather">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>160</y>
+      <width>280</width>
+      <height>220</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_weather">
+     <item>
+      <widget class="QLabel" name="label_temperature">
+       <property name="text">
+        <string>Nhiệt độ: 28°C</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_humidity">
+       <property name="text">
+        <string>Độ ẩm: 75%</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_pressure">
+       <property name="text">
+        <string>Áp suất: 1008 hPa</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_wind_speed">
+       <property name="text">
+        <string>Tốc độ gió: 12 km/h</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_uv_index">
+       <property name="text">
+        <string>Chỉ số UV: 6 (Cao)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_weather_description">
+       <property name="text">
+        <string>Trạng thái: Trời nhiều mây ⛅</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QFrame" name="frame_chart">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>160</y>
+      <width>600</width>
+      <height>220</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+   </widget>
+   <widget class="QWidget" name="forecast_container">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>400</y>
+      <width>920</width>
+      <height>180</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="forecast_layout">
+     <item>
+      <widget class="QFrame" name="frame_day1">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <layout class="QVBoxLayout" name="layout_day1">
+        <item>
+         <widget class="QLabel" name="label_day1">
+          <property name="text">
+           <string>Thứ Hai</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_temp1">
+          <property name="text">
+           <string>30°C / 25°C</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_icon1">
+          <property name="text">
+           <string>☀️</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_rain1">
+          <property name="text">
+           <string>10% mưa</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="frame_day2">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <layout class="QVBoxLayout" name="layout_day2">
+        <item>
+         <widget class="QLabel" name="label_day2">
+          <property name="text">
+           <string>Thứ Ba</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_temp2">
+          <property name="text">
+           <string>29°C / 24°C</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_icon2">
+          <property name="text">
+           <string>🌤</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_rain2">
+          <property name="text">
+           <string>20% mưa</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="frame_day3">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <layout class="QVBoxLayout" name="layout_day3">
+        <item>
+         <widget class="QLabel" name="label_day3">
+          <property name="text">
+           <string>Thứ Tư</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_temp3">
+          <property name="text">
+           <string>27°C / 23°C</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_icon3">
+          <property name="text">
+           <string>🌧</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_rain3">
+          <property name="text">
+           <string>60% mưa</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="frame_day4">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <layout class="QVBoxLayout" name="layout_day4">
+        <item>
+         <widget class="QLabel" name="label_day4">
+          <property name="text">
+           <string>Thứ Năm</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_temp4">
+          <property name="text">
+           <string>28°C / 24°C</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_icon4">
+          <property name="text">
+           <string>⛅</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_rain4">
+          <property name="text">
+           <string>30% mưa</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="frame_day5">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <layout class="QVBoxLayout" name="layout_day5">
+        <item>
+         <widget class="QLabel" name="label_day5">
+          <property name="text">
+           <string>Thứ Sáu</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_temp5">
+          <property name="text">
+           <string>31°C / 26°C</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_icon5">
+          <property name="text">
+           <string>☀️</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_rain5">
+          <property name="text">
+           <string>5% mưa</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="frame_day6">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <layout class="QVBoxLayout" name="layout_day6">
+        <item>
+         <widget class="QLabel" name="label_day6">
+          <property name="text">
+           <string>Thứ Bảy</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_temp6">
+          <property name="text">
+           <string>30°C / 25°C</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_icon6">
+          <property name="text">
+           <string>⛈</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_rain6">
+          <property name="text">
+           <string>70% mưa</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="frame_day7">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <layout class="QVBoxLayout" name="layout_day7">
+        <item>
+         <widget class="QLabel" name="label_day7">
+          <property name="text">
+           <string>Chủ Nhật</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_temp7">
+          <property name="text">
+           <string>29°C / 24°C</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_icon7">
+          <property name="text">
+           <string>🌦</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_rain7">
+          <property name="text">
+           <string>40% mưa</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label_weather_alert">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>600</y>
+      <width>280</width>
+      <height>80</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>⚠️ Cảnh báo: Mưa dông lúc 15:00</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame_clothing_suggestion">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>610</y>
+      <width>280</width>
+      <height>100</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <layout class="QVBoxLayout" name="layout_clothing">
+     <item>
+      <widget class="QLabel" name="label_clothing_title">
+       <property name="text">
+        <string>👕 Gợi ý trang phục hôm nay</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_clothing_suggestion">
+       <property name="text">
+        <string>Mang theo áo khoác nhẹ và ô do trời có thể mưa.</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
