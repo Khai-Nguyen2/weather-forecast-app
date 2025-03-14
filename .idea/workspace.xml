@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8865a919-7618-4ccc-a5fa-cc42537c6a12" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/weatherUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/weatherUI.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +46,7 @@
   &quot;keyToString&quot;: {
     &quot;Python.a.executor&quot;: &quot;Run&quot;,
     &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.ui_ex.executor&quot;: &quot;Run&quot;,
     &quot;Python.weatherUI.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
